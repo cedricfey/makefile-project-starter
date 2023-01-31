@@ -24,8 +24,17 @@ docker-compose.local.yml:
 docker-compose.traefik.yml:
 	@cp doc/examples/docker-compose.traefik.yml $@
 
+Procfile:
+	@cp doc/examples/Procfile $@
+
+entrypoint.sh:
+	@cp doc/examples/entrypoint.sh $@
+
+Dockerfile:
+	@cp doc/examples/Dockerfile $@
+
 .PHONY: install
-install: env.sh docker-compose.yml docker-compose.test.yml docker-compose.local.yml docker-compose.traefik.yml
+install: env.sh docker-compose.yml docker-compose.test.yml docker-compose.local.yml docker-compose.traefik.yml Procfile entrypoint.sh Dockerfile
 
 .PHONY: clean
 clean:
@@ -35,7 +44,7 @@ default.config:
 	@echo -n "App name? " && read name &&  echo "APP_NAME=$${name}" > $@ && \
 	echo -n "Project name? ($${name})" && read project_name &&  echo "PROJECT_NAME=$${project_name:-$$name}" >> $@ && \
 	echo -n "Scalingo app name? ($${name})" && read scalingo_app_name &&  echo "SCALINGO_APP_NAME=$${scalingo_app_name:-$$name}" >> $@ && \
-	echo -n "Registry url? (localhost/$${name})" && read registry_project_url &&  echo "REGISTRY_PROJECT_URL=$${registry_project_url:-localhost/$$name}" >> $@
+	echo -n "Registry url? (localhost/$${name})" && read registry_project_url &&  echo "REGISTRY_PROJECT_URL=$${registry_project_url:-localhost/$$name}" >> $@ && \
 	echo -n "App image? (localhost/$${name}:latest)" && read app_image &&  echo "APP_IMAGE=$${app_image:-localhost/$$name:latest}" >> $@
 
 # @echo -n "Are you sure? [y/N] " && read ans && if [ $${ans:-'N'} = 'y' ]; then make ENV=test spec-tests; fi
