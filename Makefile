@@ -1,11 +1,13 @@
-# REGISTRY_PROJECT_URL ?= my-awesome-registry.org/my-cool-project
-# BUILD_ID ?= commit_sha
-# BUILD_ID ?=$(shell test -d .git && git rev-parse --short=8 HEAD)
-# REF_ID = branch_name
-# REF_ID ?=$(shell test -d .git && git symbolic-ref --short HEAD)
+BUILD_SUBPATH ?=dev
+BUILD_ID ?=$(shell test -d .git && git rev-parse HEAD | cut -c -8)
+REF_ID ?=$(shell test -d .git \
+	 && git symbolic-ref --short HEAD \
+	 | sed -e 's/[^a-z0-9]/-/g' -e 's/^[-+]//' -e 's/[-+]$$//' \
+	 | cut -c 1-62)
 
 default: help
-include *.mk
+include makefiles/install.mk
+include makefiles/*.mk
 
 ci-build: docker-pull docker-build
 ci-push: docker-push
